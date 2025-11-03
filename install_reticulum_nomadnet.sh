@@ -191,6 +191,25 @@ install_system_dependencies() {
 # Python Package Installation
 ################################################################################
 
+# Helper function to safely install pip packages
+safe_pip_install() {
+    local package=$1
+    print_info "Installing $package..."
+
+    # Try normal user install first
+    if pip3 install --user "$package" 2>&1 | tee /tmp/pip_install.log | grep -q "externally-managed-environment"; then
+        print_warning "System has externally-managed Python environment"
+        print_info "Using --break-system-packages flag (safe for user installs)"
+        pip3 install --user --break-system-packages "$package"
+    elif grep -q "error" /tmp/pip_install.log; then
+        print_error "Failed to install $package"
+        return 1
+    fi
+
+    rm -f /tmp/pip_install.log
+    return 0
+}
+
 install_reticulum() {
     print_header "Installing Reticulum Network Stack"
 
@@ -203,12 +222,10 @@ install_reticulum() {
 
     case $choice in
         1)
-            print_info "Installing standard Reticulum package (rns)..."
-            pip3 install --user rns
+            safe_pip_install "rns"
             ;;
         2)
-            print_info "Installing pure Python Reticulum package (rnspure)..."
-            pip3 install --user rnspure
+            safe_pip_install "rnspure"
             ;;
         *)
             print_error "Invalid choice"
@@ -222,8 +239,7 @@ install_reticulum() {
 install_lxmf() {
     print_header "Installing LXMF (Lightweight Extensible Message Format)"
 
-    print_info "Installing LXMF >= 0.6.1..."
-    pip3 install --user "lxmf>=0.6.1"
+    safe_pip_install "lxmf>=0.6.1"
 
     print_success "LXMF installed successfully"
 }
@@ -231,13 +247,14 @@ install_lxmf() {
 install_nomadnet() {
     print_header "Installing Nomadnet"
 
-    print_info "Installing Nomadnet and dependencies..."
+    print_info "Nomadnet will install with dependencies:"
     print_info "  - rns >= 0.9.1"
     print_info "  - lxmf >= 0.6.1"
     print_info "  - urwid >= 2.6.16"
     print_info "  - qrcode"
+    echo ""
 
-    pip3 install --user nomadnet
+    safe_pip_install "nomadnet"
 
     print_success "Nomadnet installed successfully"
 }
@@ -256,8 +273,8 @@ install_optional_tools() {
     echo
 
     if [[ $REPLY =~ ^[Yy]$ ]]; then
-        print_info "Installing optional packages..."
-        pip3 install --user feedparser requests
+        safe_pip_install "feedparser"
+        safe_pip_install "requests"
         print_success "Optional packages installed"
     else
         print_info "Skipping optional packages"
