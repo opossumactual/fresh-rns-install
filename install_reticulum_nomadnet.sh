@@ -124,7 +124,7 @@ install_system_dependencies() {
                 python3-pip \
                 python3-dev \
                 python3-cryptography \
-                python3-pyserial \
+                python3-serial \
                 build-essential \
                 libssl-dev \
                 libffi-dev \
