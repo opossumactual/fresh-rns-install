@@ -31,7 +31,7 @@ This script automates the installation of:
 
 ```bash
 # Download the script
-wget https://raw.githubusercontent.com/YOURUSERNAME/reticulum-installer/main/install_reticulum_nomadnet.sh
+wget https://raw.githubusercontent.com/opossumactual/fresh-rns-install/main/install_reticulum_nomadnet.sh
 
 # Make it executable
 chmod +x install_reticulum_nomadnet.sh
@@ -43,9 +43,15 @@ chmod +x install_reticulum_nomadnet.sh
 Or clone the repository:
 
 ```bash
-git clone https://github.com/YOURUSERNAME/reticulum-installer.git
-cd reticulum-installer
+git clone https://github.com/opossumactual/fresh-rns-install.git
+cd fresh-rns-install
 ./install_reticulum_nomadnet.sh
+```
+
+**One-liner (downloads and runs):**
+
+```bash
+curl -sSL https://raw.githubusercontent.com/opossumactual/fresh-rns-install/main/install_reticulum_nomadnet.sh | bash
 ```
 
 ## What Gets Installed
