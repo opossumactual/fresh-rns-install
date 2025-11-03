@@ -12,3 +12,4 @@ Thumbs.db
 # Test files
 test/
 *.log
+DEVELOPMENT_NOTES.md
