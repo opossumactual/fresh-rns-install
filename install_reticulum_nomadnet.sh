@@ -119,16 +119,21 @@ install_system_dependencies() {
         ubuntu|debian|linuxmint|pop)
             print_info "Installing dependencies for Debian/Ubuntu-based system..."
             sudo apt-get update
+
+            # Install required packages
             sudo apt-get install -y \
                 python3 \
                 python3-pip \
                 python3-dev \
-                python3-cryptography \
-                python3-serial \
                 build-essential \
                 libssl-dev \
                 libffi-dev \
                 git
+
+            # Install optional packages (don't fail if they don't exist)
+            sudo apt-get install -y python3-cryptography python3-serial 2>/dev/null || true
+
+            print_info "Note: python3-serial is optional (only needed for serial interfaces)"
             ;;
 
         fedora|rhel|centos)
@@ -137,12 +142,15 @@ install_system_dependencies() {
                 python3 \
                 python3-pip \
                 python3-devel \
-                python3-cryptography \
-                python3-pyserial \
                 gcc \
                 openssl-devel \
                 libffi-devel \
                 git
+
+            # Install optional packages
+            sudo dnf install -y python3-cryptography python3-pyserial 2>/dev/null || true
+
+            print_info "Note: python3-pyserial is optional (only needed for serial interfaces)"
             ;;
 
         arch|manjaro)
@@ -150,11 +158,14 @@ install_system_dependencies() {
             sudo pacman -Sy --noconfirm \
                 python \
                 python-pip \
-                python-cryptography \
-                python-pyserial \
                 base-devel \
                 openssl \
                 git
+
+            # Install optional packages
+            sudo pacman -S --noconfirm python-cryptography python-pyserial 2>/dev/null || true
+
+            print_info "Note: python-pyserial is optional (only needed for serial interfaces)"
             ;;
 
         *)
